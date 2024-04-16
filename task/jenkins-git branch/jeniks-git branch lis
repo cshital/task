@@ -1,0 +1,14 @@
+# jeniks-git branch lis:
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                echo "Selected branch: ${params.branchName}"
+             
+        }
+    }
+}
+}

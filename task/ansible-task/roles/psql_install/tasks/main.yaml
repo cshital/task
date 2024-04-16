@@ -1,0 +1,38 @@
+---
+- name: Update Packages
+  apt: 
+    update_cache: yes
+
+- name: Add the PSQL APT key
+  apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+    state: present
+
+- name: Add the PSQL APT repositories
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+    state: present
+
+- name: Install PostgreSQL
+  apt:
+    name: "postgresql-{{ postgresql_version }}"
+    state: present
+
+- name: Ensure correct permissions on temporary directory
+  become: yes
+  become_user: root
+  file:
+    path: /var/tmp/ansible-tmp
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: '0775'
+
+# - name: Set password for PostgreSQL root user
+#   become: yes
+#   remote_user: ubuntu
+#   postgresql_query:
+#     login_host: localhost
+#     login_user: '{{ db_user }}'
+#     db: postgres
+#     query: "ALTER USER postgres WITH PASSWORD '{{ postgres_password }}';"
